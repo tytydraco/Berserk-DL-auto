@@ -31,7 +31,7 @@ jobs:
       
       - name: Zip
         if: ${{ steps.commit.outputs.alive != 'false' }}
-        run: zip -r9 "archive-${{ steps.date.outputs.date }}".zip output/*
+        run: zip -r9 archive-${{ steps.date.outputs.date }}.zip output/*
 
       - name: Upload
         if: ${{ steps.commit.outputs.alive != 'false' }}
@@ -40,3 +40,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           automatic_release_tag: archive-${{ steps.date.outputs.date }}
           prerelease: false
+          files: archive-${{ steps.date.outputs.date }}.zip
