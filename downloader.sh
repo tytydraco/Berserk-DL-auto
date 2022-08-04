@@ -22,7 +22,6 @@ for f in $(cat ./output/chaplist.txt); do
 		esac
 		let "count=count+1";
 	done
-	break
 done
 echo "Downloads done :)"
 rm -f ./output/*.txt
