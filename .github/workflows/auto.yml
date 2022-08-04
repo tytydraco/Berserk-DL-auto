@@ -18,11 +18,12 @@ jobs:
       - name: Commit
         id: commit
         run: |
+          return
           git config --global user.email "Berserk-DL-auto@github-action.com"
           git config --global user.name "Berserk-DL-auto"
           git add .
           git commit -sam "Updated chapters" || echo "::set-output name=alive::false"
-          git push || true
+          git push || echo "::set-output name=alive::false"
       
       - name: Get current date
         if: ${{ steps.commit.outputs.alive != 'false' }}
@@ -31,7 +32,7 @@ jobs:
       
       - name: Zip
         if: ${{ steps.commit.outputs.alive != 'false' }}
-        run: zip -r9 archive-${{ steps.date.outputs.date }}.zip output/*
+        run: cd output && zip -r9 ../archive-${{ steps.date.outputs.date }}.zip .
 
       - name: Upload
         if: ${{ steps.commit.outputs.alive != 'false' }}
