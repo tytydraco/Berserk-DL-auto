@@ -1,0 +1,30 @@
+name: Auto run and archive
+
+on:
+  schedule:
+    - cron: 0 0 * * *
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download
+        run: bash downloader.sh
+      
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      
+      - name: Zip
+        run: zip -r9 "archive-${{ steps.date.outputs.date }}".zip output/*
+
+      - name: Upload
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: archive-${{ steps.date.outputs.date }}
+          prerelease: false
