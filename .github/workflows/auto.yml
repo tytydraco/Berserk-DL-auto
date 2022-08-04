@@ -12,27 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Download
+      - name: Update chapters
         run: bash downloader.sh
-      
-      - name: Commit
-        id: commit
-        run: |
-          return
-          git config --global user.email "Berserk-DL-auto@github-action.com"
-          git config --global user.name "Berserk-DL-auto"
-          git add .
-          git commit -sam "Updated chapters" || echo "::set-output name=alive::false"
-          git push || echo "::set-output name=alive::false"
       
       - name: Get current date
         if: ${{ steps.commit.outputs.alive != 'false' }}
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      
-      - name: Zip
-        if: ${{ steps.commit.outputs.alive != 'false' }}
-        run: cd output && zip -r9 ../archive-${{ steps.date.outputs.date }}.zip .
 
       - name: Upload
         if: ${{ steps.commit.outputs.alive != 'false' }}
@@ -41,4 +27,3 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           automatic_release_tag: archive-${{ steps.date.outputs.date }}
           prerelease: false
-          files: archive-${{ steps.date.outputs.date }}.zip
