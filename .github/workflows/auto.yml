@@ -15,14 +15,26 @@ jobs:
       - name: Download
         run: bash downloader.sh
       
+      - name: Commit
+        id: commit
+        run: |
+          git config --global user.email "Berserk-DL-auto@github-action.com"
+          git config --global user.name "Berserk-DL-auto"
+          git add .
+          git commit -sam "Updated chapters" || echo "::set-output name=alive::false"
+          git push || true
+      
       - name: Get current date
+        if: ${{ steps.commit.outputs.alive != 'false' }}
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       
       - name: Zip
+        if: ${{ steps.commit.outputs.alive != 'false' }}
         run: zip -r9 "archive-${{ steps.date.outputs.date }}".zip output/*
 
       - name: Upload
+        if: ${{ steps.commit.outputs.alive != 'false' }}
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
