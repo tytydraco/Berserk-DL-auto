@@ -7,7 +7,7 @@ echo "Starting the download of berserk chapters from https://readberserk.com/"
 curl -k -s https://readberserk.com/ | grep "btn btn-sm btn-primary mr-2" | cut -d '"' -f2 > ./output/chaplist.txt;
 for f in $(cat ./output/chaplist.txt); do
 	chap=$(echo $f | cut -d "/" -f5);
-	[[ -d "./output/$chap" ]] && continue
+	[[ -f "./output/$chap/2.jpg" ]] && continue
 	echo "Downloading $chap"
 	mkdir ./output/$chap;
 	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt;
