@@ -9,7 +9,7 @@ for f in $(cat ./output/chaplist.txt); do
 	chap=$(echo $f | cut -d "/" -f5);
 	[[ -f "./output/$chap/2.jpg" ]] && continue
 	echo "Downloading $chap"
-	mkdir ./output/$chap;
+	mkdir -p ./output/$chap;
 	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt;
 	count=1;
 	for x in $(cat ./output/$chap/imglist.txt); do
@@ -26,7 +26,6 @@ for f in $(cat ./output/chaplist.txt); do
 		esac
 		let "count=count+1";
 	done
-	
 	
   	git add .
   	git commit -sam "Updated chapter: $chap"
