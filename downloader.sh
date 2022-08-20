@@ -7,10 +7,20 @@ echo "Starting the download of berserk chapters from https://readberserk.com/"
 curl -k -s https://readberserk.com/ | grep "btn btn-sm btn-primary mr-2" | cut -d '"' -f2 > ./output/chaplist.txt;
 for f in $(cat ./output/chaplist.txt); do
 	chap=$(echo $f | cut -d "/" -f5);
-	[[ -f "./output/$chap/2.jpg" ]] && continue
 	echo "Downloading $chap"
 	mkdir -p ./output/$chap;
-	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt;
+	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt.tmp;
+	
+	# If we already have some of this downloaded...
+	if [[ -f ./output/$chap/imglist.txt ]]; then
+		# And image lists are the same, then skip!
+		rm ./output/$chap/imglist.txt.tmp
+		cmp --silent ./output/$chap/imglist.txt ./output/$chap/imglist.txt.tmp && continue
+	fi
+	
+	# Update the imglist.txt file now
+	mv ./output/$chap/imglist.txt.tmp ./output/$chap/imglist.txt
+	
 	count=1;
 	for x in $(cat ./output/$chap/imglist.txt); do
 		case $x in
