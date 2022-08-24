@@ -11,11 +11,10 @@ for f in $(cat ./output/chaplist.txt); do
 	mkdir -p ./output/$chap;
 	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt.tmp;
 	
-	# If we already have some of this downloaded...
-	if [[ -f ./output/$chap/imglist.txt ]]; then
-		# And image lists are the same, then skip!
+	# If we already have some of this downloaded and image lists are the same, then skip!
+	if [[ -f ./output/$chap/imglist.txt ]] && cmp --silent ./output/$chap/imglist.txt ./output/$chap/imglist.txt.tmp; then
 		rm ./output/$chap/imglist.txt.tmp
-		cmp --silent ./output/$chap/imglist.txt ./output/$chap/imglist.txt.tmp && continue
+		continue
 	fi
 	
 	# Update the imglist.txt file now
