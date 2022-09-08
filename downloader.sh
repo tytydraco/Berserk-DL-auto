@@ -8,17 +8,9 @@ curl -k -s https://readberserk.com/ | grep "btn btn-sm btn-primary mr-2" | cut -
 for f in $(cat ./output/chaplist.txt); do
 	chap=$(echo $f | cut -d "/" -f5);
 	echo "Downloading $chap"
+	rm -rf ./output/$chap;
 	mkdir -p ./output/$chap;
-	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt.tmp;
-	
-	# If we already have some of this downloaded and image lists are the same, then skip!
-	if [[ -f ./output/$chap/imglist.txt ]] && cmp --silent ./output/$chap/imglist.txt ./output/$chap/imglist.txt.tmp; then
-		rm ./output/$chap/imglist.txt.tmp
-		continue
-	fi
-	
-	# Update the imglist.txt file now
-	mv ./output/$chap/imglist.txt.tmp ./output/$chap/imglist.txt
+	curl -k -s $f | grep "class=\"pages__img\"" | cut -d '"' -f4 > ./output/$chap/imglist.txt;
 	
 	count=1;
 	for x in $(cat ./output/$chap/imglist.txt); do
