@@ -16,13 +16,13 @@ for f in $(cat ./output/chaplist.txt); do
 	for x in $(cat ./output/$chap/imglist.txt); do
 		case $x in
 			*".jpg"*)
-				curl -k -s $x > ./output/$chap/$count.jpg;
+				curl -k -s "$x" > ./output/$chap/$count.jpg;
 				;;
 			*".jpeg"*)
-				curl -k -s $x > ./output/$chap/$count.jpeg;
+				curl -k -s "$x" > ./output/$chap/$count.jpeg;
 				;;
 			*".png"*)
-				curl -k -s $x > ./output/$chap/$count.png;
+				curl -k -s "$x" > ./output/$chap/$count.png;
 				;;
 		esac
 		let "count=count+1";
