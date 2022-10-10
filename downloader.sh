@@ -15,13 +15,13 @@ for f in $(cat ./output/chaplist.txt); do
 	count=1;
 	for x in $(cat ./output/$chap/imglist.txt); do
 		case $x in
-			*".jpg")
+			*".jpg"*)
 				curl -k -s $x > ./output/$chap/$count.jpg;
 				;;
-			*".jpeg")
+			*".jpeg"*)
 				curl -k -s $x > ./output/$chap/$count.jpeg;
 				;;
-			*".png")
+			*".png"*)
 				curl -k -s $x > ./output/$chap/$count.png;
 				;;
 		esac
