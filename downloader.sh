@@ -27,7 +27,7 @@ for chapter_url in $chapter_list; do
 		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/[^a-zA-Z].*$//g')"
 		extension="${filename##*.}"
 		echo "Fetching $image_url"
-		curl -Lks "$image_url" > "./output/$chapter_id/$count.$extension"
+		curl -LSks "$image_url" > "./output/$chapter_id/$count.$extension"
 		((count+=1))
 	done
 done
