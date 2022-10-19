@@ -14,7 +14,7 @@ get_image_list() {
 
 echo "Downloading chapter list..."
 chapter_list="$(get_chapter_list)"
-for chapter_url in $chapter_list; do
+while read -r chapter_url; do
 	chapter_id=$(echo "$chapter_url" | cut -d "/" -f5);
 	echo "Downloading $chapter_id..."
 
@@ -23,13 +23,13 @@ for chapter_url in $chapter_list; do
 
 	image_list="$(get_image_list "$chapter_id")"
 	count=1;
-	for image_url in $image_list; do
+	while read -r image_url; do
 		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/[^a-zA-Z].*$//g')"
 		extension="${filename##*.}"
 		echo "Fetching $image_url"
 		curl -LSks "$image_url" > "./output/$chapter_id/$count.$extension"
 		((count+=1))
-	done
-done
+	done <<< "$image_list"
+done <<< "$chapter_list"
 
 echo "Downloads done :)"
