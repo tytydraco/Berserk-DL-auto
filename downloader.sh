@@ -29,7 +29,7 @@ while IFS= read -r chapter_url_raw; do
 	count=1;
 	while IFS= read -r image_url_raw; do
 		image_url="${image_url_raw//[$'\t\r\n ']}"
-		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/[^a-zA-Z].*$//g')"
+		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/?.*$//g')"
 		extension="${filename##*.}"
 		echo "Fetching $image_url"
 		curl -LSks "$image_url" > "./output/$chapter_id/$count.$extension"
