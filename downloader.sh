@@ -12,9 +12,6 @@ get_image_list() {
 		| cut -d '"' -f4
 }
 
-git config --global user.email "Berserk-DL-auto@github-action.com"
-git config --global user.name "Berserk-DL-auto"
-
 echo "Downloading chapter list..."
 chapter_list="$(get_chapter_list)"
 for chapter_url in $chapter_list; do
@@ -27,15 +24,12 @@ for chapter_url in $chapter_list; do
 	image_list="$(get_image_list "$chapter_id")"
 	count=1;
 	for image_url in $image_list; do
-		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/\?.*$//g')"
+		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/[^a-zA-Z].*$//g')"
 		extension="${filename##*.}"
-		echo "Fetching $filename"
+		echo "Fetching $image_url"
 		curl -Lks "$image_url" > "./output/$chapter_id/$count.$extension"
 		((count+=1))
 	done
-
-  	git add .
-  	git commit -sam "Updated chapter: $chapter_id" && git push
 done
 
 echo "Downloads done :)"
