@@ -14,7 +14,7 @@ get_image_list() {
 
 echo "Downloading chapter list..."
 chapter_list="$(get_chapter_list)"
-while read -r chapter_url; do
+while IFS= read -r chapter_url; do
 	chapter_id=$(echo "$chapter_url" | cut -d "/" -f5);
 	echo "Downloading $chapter_id..."
 
@@ -23,7 +23,7 @@ while read -r chapter_url; do
 
 	image_list="$(get_image_list "$chapter_id")"
 	count=1;
-	while read -r image_url; do
+	while IFS= read -r image_url; do
 		filename="$(echo "$image_url" | sed 's|.*/||g' | sed 's/[^a-zA-Z].*$//g')"
 		extension="${filename##*.}"
 		echo "Fetching $image_url"
